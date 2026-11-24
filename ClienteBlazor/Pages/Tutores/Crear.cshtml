@@ -1,0 +1,51 @@
+@page
+@model ClienteBlazor.Pages.Tutores.CrearModel
+@{
+    ViewData["Title"] = "Nuevo tutor";
+}
+
+<div class="form-card">
+    <div class="text-center mb-4">
+        <div style="font-size: 2.6rem;">👩‍🏫</div>
+        <h1 class="h3 fw-bold mt-2">Nuevo tutor</h1>
+        <p class="text-muted small mb-0">Nombre, especialidad y correo (sin duplicados)</p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.MensajeError))
+    {
+        <div class="alert alert-danger">@Model.MensajeError</div>
+    }
+
+    <form method="post">
+        <div class="mb-3">
+            <label asp-for="Tutor.Nombre" class="form-label">Nombre</label>
+            <input asp-for="Tutor.Nombre" class="form-control"
+                   placeholder="Ej: Dra. María Gómez" maxlength="100" />
+            <span asp-validation-for="Tutor.Nombre" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Tutor.Especialidad" class="form-label">Especialidad</label>
+            <input asp-for="Tutor.Especialidad" class="form-control"
+                   placeholder="Ej: Inteligencia Artificial" maxlength="100" />
+            <span asp-validation-for="Tutor.Especialidad" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Tutor.Correo" class="form-label">Correo</label>
+            <input asp-for="Tutor.Correo" type="email" class="form-control"
+                   placeholder="tutor@universidad.edu" maxlength="150" />
+            <span asp-validation-for="Tutor.Correo" class="text-danger small"></span>
+            <div class="form-text">No puede repetirse ni tener un formato inválido.</div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary btn-lg flex-grow-1">Crear tutor</button>
+            <a class="btn btn-outline-secondary btn-lg" asp-page="/Tutores/Index">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

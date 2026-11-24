@@ -1,0 +1,75 @@
+@page
+@model ClienteBlazor.Pages.Tesis.CrearModel
+@{
+    ViewData["Title"] = "Nueva tesis";
+}
+
+<div class="form-card">
+    <div class="text-center mb-4">
+        <div style="font-size: 2.6rem;">✨</div>
+        <h1 class="h3 fw-bold mt-2">Nueva tesis</h1>
+        <p class="text-muted small mb-0">Cargá los datos y elegí su tutor</p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.MensajeError))
+    {
+        <div class="alert alert-danger">@Model.MensajeError</div>
+    }
+
+    <form method="post">
+        <div class="mb-3">
+            <label asp-for="Tesis.Titulo" class="form-label">Título</label>
+            <input asp-for="Tesis.Titulo" class="form-control"
+                   placeholder="Ej: Sistema de recomendación de tesis con IA" maxlength="200" />
+            <span asp-validation-for="Tesis.Titulo" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Tesis.Estudiante" class="form-label">Estudiante</label>
+            <input asp-for="Tesis.Estudiante" class="form-control"
+                   placeholder="Nombre del estudiante" maxlength="100" />
+            <span asp-validation-for="Tesis.Estudiante" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Tesis.Estado" class="form-label">Estado</label>
+            <select asp-for="Tesis.Estado" class="form-select">
+                <option value="">-- Elegí un estado --</option>
+                @foreach (var estado in CrearModel.Estados)
+                {
+                    <option value="@estado">@estado</option>
+                }
+            </select>
+            <span asp-validation-for="Tesis.Estado" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Tesis.IdTutor" class="form-label">Tutor 👩‍🏫</label>
+            <select asp-for="Tesis.IdTutor" class="form-select">
+                <option value="">-- Elegí un tutor (máx. 3 tesis c/u) --</option>
+                @foreach (var tutor in Model.Tutores)
+                {
+                    <option value="@tutor.Id">@tutor.Nombre — @tutor.Especialidad</option>
+                }
+            </select>
+            <span asp-validation-for="Tesis.IdTutor" class="text-danger small"></span>
+            <div class="form-text">Cada tutor puede tener hasta 3 tesis asignadas.</div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary btn-lg flex-grow-1">Crear tesis</button>
+            <a class="btn btn-outline-secondary btn-lg" asp-page="/Tesis/Index">Cancelar</a>
+        </div>
+    </form>
+
+    @if (Model.Tutores.Count == 0)
+    {
+        <div class="text-center mt-3">
+            <a class="btn btn-outline-primary btn-sm" asp-page="/Tutores/Crear">➕ Crear un tutor primero</a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

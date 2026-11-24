@@ -1,0 +1,113 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+@if (!string.IsNullOrEmpty(Model.Mensaje))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @Model.Mensaje
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="hero mb-4">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1 class="display-5 mb-3">Gestión de <span style="color:#ffd6f6">Tesis</span> y Tutores</h1>
+            <p class="lead mb-4">
+                Creamos tesis, las vinculamos con su tutor, subimos imágenes y las buscamos
+                en segundos. Todo en un solo lugar, con estilo 💜
+            </p>
+            @if (Model.Logueado)
+            {
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-light btn-lg fw-semibold" asp-page="/Tesis/Index">📚 Ver tesis</a>
+                    <a class="btn btn-outline-light btn-lg" asp-page="/Tesis/Crear">✨ Nueva tesis</a>
+                    <a class="btn btn-outline-light btn-lg" asp-page="/Tutores/Crear">➕ Nuevo tutor</a>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-light btn-lg fw-semibold" asp-page="/Login">🔐 Iniciar sesión</a>
+                </div>
+                <p class="mt-3 mb-0 small" style="color:rgba(255,255,255,.85)">
+                    Entrá con <strong>admin</strong> / <strong>admin123</strong> para empezar.
+                </p>
+            }
+        </div>
+    </div>
+</div>
+
+@if (Model.Logueado)
+{
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card-soft stat-card">
+                <div class="stat-num">@Model.TotalTesis</div>
+                <div class="stat-label">📚 Tesis registradas</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-soft stat-card">
+                <div class="stat-num">@Model.TotalTutores</div>
+                <div class="stat-label">👩‍🏫 Tutores activos</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-soft stat-card">
+                <div class="stat-num">3</div>
+                <div class="stat-label">🎯 Tesis máx. por tutor</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card-soft h-100 p-4">
+                <h5 class="fw-bold mb-2">🔍 Buscar tesis y ver su tutor</h5>
+                <p class="text-muted mb-3">
+                    Buscá por título, estudiante o estado, y mirá al instante quién es el tutor responsable.
+                </p>
+                <a class="btn btn-outline-primary" asp-page="/Tesis/Index">Ir al buscador</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card-soft h-100 p-4">
+                <h5 class="fw-bold mb-2">🖼️ Subir imágenes de tesis</h5>
+                <p class="text-muted mb-3">
+                    Cargá la portada o cualquier imagen de cada tesis; se sirve directo desde la API.
+                </p>
+                <a class="btn btn-outline-primary" asp-page="/Tesis/Index">Subir una imagen</a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card-soft h-100 p-4 text-center">
+                <div style="font-size:2.5rem">📝</div>
+                <h5 class="fw-bold mt-2">Creá tesis</h5>
+                <p class="text-muted small mb-0">Título, estudiante, estado y su tutor, con validaciones anti-duplicados.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-soft h-100 p-4 text-center">
+                <div style="font-size:2.5rem">👩‍🏫</div>
+                <h5 class="fw-bold mt-2">Creá tutores</h5>
+                <p class="text-muted small mb-0">Nombre, especialidad y correo. Cada tutor admite hasta 3 tesis.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-soft h-100 p-4 text-center">
+                <div style="font-size:2.5rem">🖼️</div>
+                <h5 class="fw-bold mt-2">Subí imágenes</h5>
+                <p class="text-muted small mb-0">Adjuntá fotos a cada tesis y compartilas al instante.</p>
+            </div>
+        </div>
+    </div>
+}

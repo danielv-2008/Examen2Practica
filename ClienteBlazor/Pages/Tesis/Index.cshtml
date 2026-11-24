@@ -1,0 +1,116 @@
+@page
+@model ClienteBlazor.Pages.Tesis.IndexModel
+@{
+    ViewData["Title"] = "Tesis";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <h2 class="section-title mb-0">📚 Tesis</h2>
+    <a class="btn btn-primary" asp-page="/Tesis/Crear">✨ Nueva tesis</a>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.MensajeExito))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @Model.MensajeExito
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (!string.IsNullOrEmpty(Model.MensajeError))
+{
+    <div class="alert alert-danger">@Model.MensajeError</div>
+}
+
+@* ===== Buscador: BUSCAR TESIS Y MOSTRAR TUTOR ===== *@
+<form method="get" class="search-bar mb-4">
+    <input type="text" name="q" value="@Model.TextoBusqueda"
+           placeholder="🔍 Buscar por título, estudiante o estado..." />
+    <button type="submit" class="btn btn-primary">Buscar</button>
+    @if (!string.IsNullOrEmpty(Model.TextoBusqueda))
+    {
+        <a class="btn btn-outline-secondary" asp-page="/Tesis/Index">Limpiar</a>
+    }
+</form>
+
+@if (!string.IsNullOrEmpty(Model.TextoBusqueda))
+{
+    <p class="text-muted mb-3">
+        <strong>@Model.Resultados.Count</strong> resultado(s) para
+        "<span class="text-magenta fw-semibold">@Model.TextoBusqueda</span>"
+    </p>
+}
+
+@if (Model.Resultados.Count == 0)
+{
+    <div class="empty-state card-soft">
+        <span class="emoji">📖</span>
+        <h5 class="fw-bold">No hay tesis por acá</h5>
+        <p class="mb-3">Probá con otra búsqueda o creá una tesis nueva.</p>
+        <a class="btn btn-primary" asp-page="/Tesis/Crear">Crear la primera</a>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var tesis in Model.Resultados)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card-soft tesis-card">
+                    @if (!string.IsNullOrEmpty(tesis.Imagen))
+                    {
+                        <img src="@tesis.Imagen" class="card-img-top" alt="Imagen de @tesis.Titulo" />
+                    }
+                    else
+                    {
+                        <div class="sin-imagen">📄</div>
+                    }
+
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                            <span class="tesis-titulo">@tesis.Titulo</span>
+                            <span class="badge-estado @EstadoClase(tesis.Estado)">@tesis.Estado</span>
+                        </div>
+
+                        <p class="mb-2">
+                            <span class="tesis-estudiante">🎓 @tesis.Estudiante</span>
+                        </p>
+
+                        @* ===== Muestra el TUTOR de cada tesis ===== *@
+                        @if (tesis.Tutor is not null)
+                        {
+                            <div class="tutor-chip mb-3">
+                                👩‍🏫 @tesis.Tutor.Nombre
+                                <small>· @tesis.Tutor.Especialidad</small>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="tutor-chip mb-3" style="opacity:.6">👩‍🏫 Sin tutor asignado</div>
+                        }
+
+                        @* ===== Subir imagen de esta tesis ===== *@
+                        <form asp-page-handler="SubirImagen" method="post" enctype="multipart/form-data"
+                              class="mt-auto">
+                            <input type="hidden" name="id" value="@tesis.Id" />
+                            <div class="input-group input-group-sm">
+                                <input type="file" name="imagen" class="form-control" accept="image/*" required />
+                                <button type="submit" class="btn btn-outline-primary">🖼️ Subir</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@functions {
+    string EstadoClase(string estado) => estado.ToLower() switch
+    {
+        "pendiente" => "estado-pendiente",
+        "en curso" or "en desarrollo" => "estado-en-curso",
+        "aprobada" or "terminada" or "finalizada" => "estado-aprobada",
+        "rechazada" or "cancelada" => "estado-rechazada",
+        _ => "estado-default"
+    };
+}

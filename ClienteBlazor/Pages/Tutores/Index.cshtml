@@ -1,0 +1,72 @@
+@page
+@model ClienteBlazor.Pages.Tutores.IndexModel
+@{
+    ViewData["Title"] = "Tutores";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <h2 class="section-title mb-0">👩‍🏫 Tutores</h2>
+    <a class="btn btn-primary" asp-page="/Tutores/Crear">➕ Nuevo tutor</a>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.MensajeExito))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @Model.MensajeExito
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (!string.IsNullOrEmpty(Model.MensajeError))
+{
+    <div class="alert alert-danger">@Model.MensajeError</div>
+}
+
+@if (Model.Tutores.Count == 0)
+{
+    <div class="empty-state card-soft">
+        <span class="emoji">👩‍🏫</span>
+        <h5 class="fw-bold">Todavía no hay tutores</h5>
+        <p class="mb-3">Creá el primero para poder asignarle tesis.</p>
+        <a class="btn btn-primary" asp-page="/Tutores/Crear">Crear tutor</a>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var tutor in Model.Tutores)
+        {
+            var tiene = Model.TesisPorTutor.TryGetValue(tutor.Id, out var c) ? c : 0;
+            var claseCupo = tiene >= 3 ? "text-danger fw-bold" : "text-magenta fw-semibold";
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card-soft h-100 p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="font-size: 2rem;">👩‍🏫</div>
+                        <div class="ms-3">
+                            <div class="fw-bold" style="font-size: 1.05rem;">@tutor.Nombre</div>
+                            <div class="text-muted small">@tutor.Especialidad</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="tutor-chip">📧 @tutor.Correo</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="@claseCupo">
+                            📚 @tiene / 3 tesis
+                        </span>
+                        @if (tiene >= 3)
+                        {
+                            <span class="badge-estado estado-rechazada">Cupo completo</span>
+                        }
+                        else
+                        {
+                            <span class="badge-estado estado-pendiente">Disponible</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

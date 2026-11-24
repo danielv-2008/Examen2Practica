@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="../ClienteBlazor/ClienteBlazor.csproj" Id="2e753a2b-7786-4398-a155-887a0ff9de46" />
+  <Project Path="../Contrato/Contrato.csproj" Id="c74cb876-52bd-4979-be6a-bb9988148ca2" />
+  <Project Path="Examen2Practica.csproj" />
+</Solution>

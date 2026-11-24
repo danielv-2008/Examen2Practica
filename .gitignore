@@ -1,0 +1,22 @@
+# .NET / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Base de datos / secrets
+appsettings.Development.json
+
+# Imágenes subidas (se regeneran)
+Examen2Practica/wwwroot/imagenes/*.png
+Examen2Practica/wwwroot/imagenes/*.jpg
+Examen2Practica/wwwroot/imagenes/*.jpeg
+
+# Logs y temp
+*.log
+*.tmp
+prueba.png
+
+# Node (por si acaso)
+node_modules/
